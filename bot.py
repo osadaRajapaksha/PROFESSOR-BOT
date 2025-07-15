@@ -51,9 +51,10 @@ class Bot(Client):
         if bool(WEB_SUPPORT) is True:
             app = web.AppRunner(web.Application(client_max_size=30000000))
             await app.setup()
-            await web.TCPSite(app, "0.0.0.0", 8080).start()
-            logging.info("Web Response Is Running......🕸️")
-            
+            port = int(os.environ.get("PORT", 8080))  # Heroku provides the PORT env var
+            await web.TCPSite(app, "0.0.0.0", port).start()
+            logging.info(f"Web server running on port {port} 🌐")
+
     async def stop(self, *args):
         await super().stop()
         logging.info(f"Bot Is Restarting ⟳...")
